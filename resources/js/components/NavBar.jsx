@@ -12,6 +12,7 @@ function NavBar({ user, handleLogout }) {
                 <>
                     <span>Welcome, {user.name}</span>
                     <button onClick={handleLogout}>Logout</button>
+                    <NavLink to="/save-python">Python File Uploader</NavLink>
                 </>
             ) : (
                 <NavLink to="/login">Login</NavLink>

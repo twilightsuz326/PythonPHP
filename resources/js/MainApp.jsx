@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage';
 import Home from './components/Home';
 import DashboardPage from './components/DashboardPage';
 import About from './components/About';
+import PythonFileUploader from './pages/PythonFileUploader';
 
 function MainApp() {
     const [user, setUser] = useState(null);
@@ -37,6 +38,7 @@ function MainApp() {
                     element={user ? <DashboardPage user={user} /> : <Navigate to="/login" />}
                 />
                 <Route path="/about" element={<About />} />
+                <Route path="/save-python" element={user ? <PythonFileUploader /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
     );

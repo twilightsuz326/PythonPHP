@@ -24,4 +24,12 @@ class PythonFileController extends Controller
 
         return response()->json(['message' => 'Python file saved successfully!'], 200);
     }
+
+    public function listPythonFiles()
+    {
+        $directory = storage_path('app/py');
+        $files = array_diff(scandir($directory), ['.', '..']); // pyフォルダ内のファイル一覧を取得
+
+        return response()->json(['files' => array_values($files)]);
+    }
 }

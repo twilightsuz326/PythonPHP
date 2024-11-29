@@ -7,6 +7,7 @@ import Home from './components/Home';
 import DashboardPage from './components/DashboardPage';
 import About from './components/About';
 import PythonFileUploader from './pages/PythonFileUploader';
+import PythonExecutor from './pages/PythonExecutor';
 
 function MainApp() {
     const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ function MainApp() {
                 />
                 <Route path="/about" element={<About />} />
                 <Route path="/save-python" element={user ? <PythonFileUploader /> : <Navigate to="/login" />} />
+                <Route path="/run-python" element={user ? <PythonExecutor /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
     );

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PythonExecutionController;
 use App\Http\Controllers\PythonFileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,3 +41,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/save-python', [PythonFileController::class, 'savePythonCode'])->middleware('auth:sanctum');
+Route::get('/python-files', [PythonFileController::class, 'listPythonFiles'])->middleware('auth:sanctum');
+Route::post('/execute-python', [PythonExecutionController::class, 'executePythonFile'])->middleware('auth:sanctum');

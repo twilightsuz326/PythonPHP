@@ -24,15 +24,11 @@ class PythonExecutionController extends Controller
             return response()->json(['error' => 'File not found.'], 404);
         }
 
-        // 引数をUTF-8に変換（必要に応じて）
-        $encodedParameters = array_map(function ($param) {
-            return mb_convert_encoding($param, 'UTF-8', 'auto');
-        }, $parameters);
+        $command = array_merge(['python3', $filePath], $parameters);
 
-        // エスケープせずにそのまま渡す
-        $command = array_merge(['python3', $filePath], $encodedParameters);
-
+        // LANG環境変数を設定して日本語入力を可能にする
         $process = new Process($command);
+        $process->setEnv(['LANG' => 'en_US.UTF-8']);
         $process->run();
 
         if (!$process->isSuccessful()) {

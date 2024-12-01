@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PythonExecutionController;
 use App\Http\Controllers\PythonFileController;
+use App\Http\Controllers\PythonScheduleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
@@ -43,3 +44,4 @@ Route::get('/user', function (Request $request) {
 Route::post('/save-python', [PythonFileController::class, 'savePythonCode'])->middleware('auth:sanctum');
 Route::get('/python-files', [PythonFileController::class, 'listPythonFiles'])->middleware('auth:sanctum');
 Route::post('/execute-python', [PythonExecutionController::class, 'executePythonFile'])->middleware('auth:sanctum');
+Route::apiResource('/python-schedules', PythonScheduleController::class)->middleware('auth:sanctum');

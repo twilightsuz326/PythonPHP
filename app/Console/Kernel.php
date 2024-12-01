@@ -10,9 +10,21 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedules = \App\Models\PythonSchedule::all();
+
+        foreach ($schedules as $task) {
+            $command = sprintf(
+                'cd %s && python3 %s %s',
+                public_path(), // カレントディレクトリを public に設定
+                escapeshellarg(storage_path('app/py/' . $task->filename)), // Python ファイルのパス
+                implode(' ', array_map('escapeshellarg', $task->parameters)) // パラメータをエスケープ
+            );
+
+            $schedule->exec($command)
+                ->cron($task->cron_expression);
+        }
     }
 
     /**

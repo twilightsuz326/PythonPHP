@@ -8,6 +8,7 @@ import DashboardPage from './components/DashboardPage';
 import About from './components/About';
 import PythonFileUploader from './pages/PythonFileUploader';
 import PythonExecutor from './pages/PythonExecutor';
+import PythonScheduler from './pages/PythonScheduler';
 
 function MainApp() {
     const [user, setUser] = useState(null);
@@ -41,6 +42,7 @@ function MainApp() {
                 <Route path="/about" element={<About />} />
                 <Route path="/save-python" element={user ? <PythonFileUploader /> : <Navigate to="/login" />} />
                 <Route path="/run-python" element={user ? <PythonExecutor /> : <Navigate to="/login" />} />
+                <Route path="/python-schedules" element={user ? <PythonScheduler /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
     );

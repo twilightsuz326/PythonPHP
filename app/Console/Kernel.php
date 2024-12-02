@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,19 +14,20 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedules = \App\Models\PythonSchedule::all();
+        $pythonService = app(\App\Services\PythonExecutionService::class);
 
         foreach ($schedules as $task) {
-            $command = sprintf(
-                'cd %s && ~/.rye/shims/python3 %s %s',
-                public_path(), // カレントディレクトリを public に設定
-                escapeshellarg(storage_path('app/py/' . $task->filename)), // Python ファイルのパス
-                implode(' ', array_map('escapeshellarg', $task->parameters)) // パラメータをエスケープ
-            );
-
-            $schedule->exec($command)
-                ->cron($task->cron_expression);
+            $schedule->call(function () use ($task, $pythonService) {
+                try {
+                    $output = $pythonService->execute($task->filename, $task->parameters);
+                    Log::info('Python script succeeded: ' . $output);
+                } catch (\Exception $e) {
+                    Log::error('Python script failed: ' . $e->getMessage());
+                }
+            })->cron($task->cron_expression);
         }
     }
+
 
     /**
      * Register the commands for the application.

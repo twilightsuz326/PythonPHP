@@ -24,11 +24,21 @@ class PythonExecutionController extends Controller
             return response()->json(['error' => 'File not found.'], 404);
         }
 
-        $command = array_merge(['python3', $filePath], $parameters);
+        $command = sprintf(
+            'cd %s && '. getenv('PYTHON_PATH').' %s %s',
+            public_path(),
+            escapeshellarg($filePath),
+            implode(' ', array_map('escapeshellarg', $parameters))
+        );
 
-        // LANG環境変数を設定して日本語入力を可能にする
-        $process = new Process($command);
-        $process->setEnv(['LANG' => 'en_US.UTF-8']);
+        // シェルコマンドのプロセスを生成
+        $process = Process::fromShellCommandline($command);
+
+        // 環境変数を設定
+        $process->setEnv([
+            'LANG' => 'en_US.UTF-8', // 日本語出力用に設定
+            'PYTHONPATH' => getenv('RYE_PATH'), // PYTHONPATH の設定
+        ]);
         $process->run();
 
         if (!$process->isSuccessful()) {

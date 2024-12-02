@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
 
         foreach ($schedules as $task) {
             $command = sprintf(
-                'cd %s && python3 %s %s',
+                'cd %s && ~/.rye/shims/python3 %s %s',
                 public_path(), // カレントディレクトリを public に設定
                 escapeshellarg(storage_path('app/py/' . $task->filename)), // Python ファイルのパス
                 implode(' ', array_map('escapeshellarg', $task->parameters)) // パラメータをエスケープ

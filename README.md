@@ -15,3 +15,16 @@ npm install
 # php バージョンを指定する場合は、/opt/php-*.*.*/bin/phpを指定する
 * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ```
+
+## rye setting
+* レンタルサーバーのため、Pythonのパッケージ管理にはryeを使用。
+```bash
+# ryeのインストール後
+rye init
+rye add requests
+rye add beautifulsoup4
+
+# Python・パッケージのパスを.envに追加
+PYTHON_PATH="***/.rye/shims/python3"
+RYE_PATH="***/.venv/lib/python3.12/site-packages"
+```

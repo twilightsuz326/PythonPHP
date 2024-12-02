@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PythonFileSelector from '../components/PythonFileSelector';
+import ParameterInput from '../components/ParameterInput';
 
 function PythonScheduler() {
+    const [files, setFiles] = useState([]);
     const [schedules, setSchedules] = useState([]);
     const [form, setForm] = useState({
         filename: '',
@@ -9,12 +12,22 @@ function PythonScheduler() {
         cron_expression: '',
     });
 
+    const fetchFiles = async () => {
+        try {
+            const response = await axios.get('/api/python-files');
+            setFiles(response.data.files);
+        } catch (err) {
+            console.error('Failed to fetch files:', err);
+        }
+    };
+
     const fetchSchedules = async () => {
         const response = await axios.get('/api/python-schedules');
         setSchedules(response.data);
     };
 
     useEffect(() => {
+        fetchFiles();
         fetchSchedules();
     }, []);
 
@@ -45,27 +58,15 @@ function PythonScheduler() {
         <div>
             <h1>Python Scheduler</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>
-                        Filename:
-                        <input
-                            type="text"
-                            value={form.filename}
-                            onChange={(e) => setForm({ ...form, filename: e.target.value })}
-                            required
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Parameters (space-separated):
-                        <input
-                            type="text"
-                            value={form.parameters}
-                            onChange={(e) => setForm({ ...form, parameters: e.target.value })}
-                        />
-                    </label>
-                </div>
+                <PythonFileSelector
+                    files={files}
+                    selectedFile={form.filename}
+                    setSelectedFile={(filename) => setForm({ ...form, filename })}
+                />
+                <ParameterInput
+                    parameters={form.parameters}
+                    setParameters={(parameters) => setForm({ ...form, parameters })}
+                />
                 <div>
                     <label>
                         Cron Expression:

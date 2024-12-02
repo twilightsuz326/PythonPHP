@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PythonFileSelector from '../components/PythonFileSelector';
+import ParameterInput from '../components/ParameterInput';
+import ExecutionResult from '../components/ExecutionResult';
 
 function PythonExecutor() {
     const [files, setFiles] = useState([]);
@@ -8,17 +11,17 @@ function PythonExecutor() {
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
 
+    const fetchFiles = async () => {
+        try {
+            const response = await axios.get('/api/python-files');
+            setFiles(response.data.files);
+        } catch (err) {
+            console.error('Failed to fetch files:', err);
+        }
+    };
+
     // Pythonファイル一覧を取得
     useEffect(() => {
-        const fetchFiles = async () => {
-            try {
-                const response = await axios.get('/api/python-files');
-                setFiles(response.data.files);
-            } catch (err) {
-                console.error('Failed to fetch files:', err);
-            }
-        };
-
         fetchFiles();
     }, []);
 
@@ -52,48 +55,18 @@ function PythonExecutor() {
         <div>
             <h1>Python File Executor</h1>
             <form onSubmit={handleExecute}>
-                <div>
-                    <label>
-                        Select Python File:
-                        <select
-                            value={selectedFile}
-                            onChange={(e) => setSelectedFile(e.target.value)}
-                            required
-                        >
-                            <option value="">-- Select a File --</option>
-                            {files.map((file) => (
-                                <option key={file} value={file}>
-                                    {file}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Parameters (space-separated):
-                        <input
-                            type="text"
-                            value={parameters}
-                            onChange={(e) => setParameters(e.target.value)}
-                            placeholder="e.g., param1 param2"
-                        />
-                    </label>
-                </div>
+                <PythonFileSelector
+                    files={files}
+                    selectedFile={selectedFile}
+                    setSelectedFile={setSelectedFile}
+                />
+                <ParameterInput
+                    parameters={parameters}
+                    setParameters={setParameters}
+                />
                 <button type="submit">Execute</button>
             </form>
-            {output && (
-                <div>
-                    <h2>Output:</h2>
-                    <pre>{output}</pre>
-                </div>
-            )}
-            {error && (
-                <div>
-                    <h2 style={{ color: 'red' }}>Error:</h2>
-                    <pre>{error}</pre>
-                </div>
-            )}
+            <ExecutionResult output={output} error={error} />
         </div>
     );
 }

@@ -30,6 +30,11 @@ class PythonFileController extends Controller
         $directory = storage_path('app/py');
         $files = array_diff(scandir($directory), ['.', '..']); // pyフォルダ内のファイル一覧を取得
 
+        // .pyファイルのみを抽出
+        $files = array_filter($files, function ($file) {
+            return pathinfo($file, PATHINFO_EXTENSION) === 'py';
+        });
+
         return response()->json(['files' => array_values($files)]);
     }
 }

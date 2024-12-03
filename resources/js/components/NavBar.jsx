@@ -5,7 +5,7 @@ function NavBar({ user, handleLogout }) {
     return (
         <div>
             <h1>NavBar</h1>
-            <a href="javascript:allowWebPush()">WebPushを許可する</a>
+            <button onClick={allowWebPush}>Allow Web Push</button>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/about">About</NavLink>
             <NavLink to="/dashboard">Dashboard</NavLink>

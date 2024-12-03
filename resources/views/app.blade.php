@@ -25,9 +25,6 @@
 
     <script defer src='/service-worker.js'></script>
     <script src='/js/webpush.js'></script>
-    <script src='/js/prism.js'></script>
-
-    <link href="/css/prism.css" rel="stylesheet" />
 
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])

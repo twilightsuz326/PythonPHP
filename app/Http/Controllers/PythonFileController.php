@@ -3,38 +3,50 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\PythonFileService;
 use Illuminate\Support\Facades\Storage;
+
 
 class PythonFileController extends Controller
 {
+    private $pythonFileService;
+
+    public function __construct(PythonFileService $pythonFileService)
+    {
+        $this->pythonFileService = $pythonFileService;
+    }
+
     public function savePythonCode(Request $request)
     {
         // バリデーション
-        $request->validate([
-            'filename' => 'required|string|max:255',
+        $validated = $request->validate([
+            'filename' => 'required|string',
             'code' => 'required|string',
         ]);
 
-        $directory = 'py';
-        $filename = $request->input('filename') . '.py';
-        $code = $request->input('code');
-
-        // ファイルをstorageディレクトリに保存
-        Storage::disk('local')->put($directory . '/' . $filename, $code);
-
-        return response()->json(['message' => 'Python file saved successfully!'], 200);
+        try {
+            $this->pythonFileService->savePythonCode($validated['filename'], $validated['code']);
+            return response()->json(['message' => 'File saved successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to save file'], 500);
+        }
     }
 
     public function listPythonFiles()
     {
-        $directory = storage_path('app/py');
-        $files = array_diff(scandir($directory), ['.', '..']); // pyフォルダ内のファイル一覧を取得
-
-        // .pyファイルのみを抽出
-        $files = array_filter($files, function ($file) {
-            return pathinfo($file, PATHINFO_EXTENSION) === 'py';
-        });
-
-        return response()->json(['files' => array_values($files)]);
+        $filelist = $this->pythonFileService->getFileList();
+        return response()->json(['files' => $filelist], 200);
     }
+
+    // 指定ファイルの内容を取得
+    public function getFile($file)
+    {
+        try {
+            $content = $this->pythonFileService->getFileContent($file);
+            return response()->json(['code' => $content], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
 }

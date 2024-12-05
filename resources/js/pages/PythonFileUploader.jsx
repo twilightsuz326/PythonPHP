@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PythonFileSelector from '../components/PythonFileSelector';
+import CodeEditor from '../components/CodeEditor';
 
 function PythonFileUploader() {
     const [filename, setFilename] = useState('');
-    const [code, setCode] = useState('');
+    const [code, setCode] = useState([
+        {
+            type: 'code',
+            children: [{ text: '' }],
+        },
+    ]);
     const [message, setMessage] = useState('');
     const [files, setFiles] = useState([]);
     const [selectedFile, setSelectedFile] = useState('');
@@ -30,17 +36,22 @@ function PythonFileUploader() {
             const response = await axios.get(`/api/python-files/${file}`);
             setSelectedFile(file);
             setFilename(file.replace('.py', ''));
-            setCode(response.data.code);
+            setCode([
+                {
+                    type: 'code',
+                    children: [{ text: response.data.code }],
+                },
+            ]);
         } catch (err) {
             console.error('Failed to open file:', err);
         }
-    }
+    };
 
     // ファイルを保存
     const handleSave = async (e) => {
         e.preventDefault();
 
-        if (!filename || !code) {
+        if (!filename || code.length === 0 || !code[0]?.children[0]?.text) {
             setMessage('Filename and code are required!');
             return;
         }
@@ -48,7 +59,7 @@ function PythonFileUploader() {
         try {
             const response = await axios.post('/api/save-python', {
                 filename,
-                code,
+                code: code[0]?.children[0]?.text, // Slateの構造から実際のコードを取得
             });
 
             if (response.status === 200) {
@@ -82,7 +93,12 @@ function PythonFileUploader() {
                         <input
                             type="text"
                             value={filename}
-                            onChange={(e) => setFilename(e.target.value)}
+                            onChange={(e) => {
+                                setFilename(e.target.value);
+                                if (!selectedFile) {
+                                    setCode([{ type: 'code', children: [{ text: '' }] }]); // 新規ファイル時にリセット
+                                }
+                            }}
                             required
                         />
                     </label>
@@ -90,13 +106,7 @@ function PythonFileUploader() {
                 <div>
                     <label>
                         Python Code:
-                        <textarea
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            rows="10"
-                            cols="50"
-                            required
-                        />
+                        <CodeEditor code={code} onChange={setCode} />
                     </label>
                 </div>
                 <button type="submit">Save Python File</button>

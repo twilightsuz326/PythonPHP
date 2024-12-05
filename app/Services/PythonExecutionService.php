@@ -23,22 +23,20 @@ class PythonExecutionService
             throw new \RuntimeException('Python script file not found: ' . $filePath);
         }
 
-        $command = sprintf(
-            'cd %s && %s %s %s',
-            escapeshellarg(public_path()), // カレントディレクトリを public に設定
-            getenv('PYTHON_PATH') ?: 'python3', // Python 実行パス
-            escapeshellarg($filePath), // Python ファイルのパス
-            implode(' ', array_map('escapeshellarg', $parameters)) // パラメータをエスケープ
-        );
+        $command = array_merge([getenv('PYTHON_PATH'), $filePath], $parameters);
 
-        $process = Process::fromShellCommandline($command);
+        $process = new Process($command);
+
+        $pypath = public_path() . '/../storage/app/py';
+
+        // 作業ディレクトリを設定
+        $process->setWorkingDirectory($pypath);
 
         // 環境変数を設定
         $process->setEnv([
-            'LANG' => 'en_US.UTF-8', // 日本語出力用に設定
+            'LANG' => 'en_US.UTF-8', // 日本語入力可能にする
             'PYTHONPATH' => getenv('RYE_PATH'), // PYTHONPATH の設定
         ]);
-
         $process->run();
 
         if (!$process->isSuccessful()) {

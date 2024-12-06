@@ -32,6 +32,14 @@ function PythonFileUploader() {
 
     // ファイルを開く
     const handleFileSelect = async (file) => {
+        if (!file) {
+            const filename = "newfile_" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + ".py";
+            setFilename(filename);
+            setSelectedFile('');
+            setCode([{ type: 'code', children: [{ text: '' }] }]);
+            return;
+        }
+
         try {
             const response = await axios.get(`/api/python-files/${file}`);
             setSelectedFile(file);
@@ -49,6 +57,7 @@ function PythonFileUploader() {
 
     // ファイルを保存
     const handleSave = async (e) => {
+        console.log({code});
         e.preventDefault();
 
         if (!filename || code.length === 0 || !code[0]?.children[0]?.text) {
@@ -57,9 +66,10 @@ function PythonFileUploader() {
         }
 
         try {
+            const strcode = code.map((block) => block.children.map((line) => line.text).join('\n')).join('\n');
             const response = await axios.post('/api/save-python', {
                 filename,
-                code: code[0]?.children[0]?.text, // Slateの構造から実際のコードを取得
+                code: strcode
             });
 
             if (response.status === 200) {
@@ -95,7 +105,7 @@ function PythonFileUploader() {
                             value={filename}
                             onChange={(e) => {
                                 setFilename(e.target.value);
-                                if (!selectedFile) {
+                                if (!selectedFile && code.length === 0) {
                                     setCode([{ type: 'code', children: [{ text: '' }] }]); // 新規ファイル時にリセット
                                 }
                             }}

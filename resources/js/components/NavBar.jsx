@@ -5,7 +5,7 @@ function NavBar({ user, handleLogout }) {
     return (
         <div>
             <h1>NavBar</h1>
-            <button onClick={allowWebPush}>Allow Web Push</button>
+            <a href="jp.co.park24.itcpquickapps://">Open App</a>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/about">About</NavLink>
             <NavLink to="/dashboard">Dashboard</NavLink>

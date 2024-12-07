@@ -39,5 +39,6 @@ Route::get('/user', function (Request $request) {
 Route::post('/save-python', [PythonFileController::class, 'savePythonCode'])->middleware('auth:sanctum');
 Route::get('/python-files', [PythonFileController::class, 'listPythonFiles'])->middleware('auth:sanctum');
 Route::get('/python-files/{file}', [PythonFileController::class, 'getFile'])->middleware('auth:sanctum');
-Route::post('/execute-python', [PythonExecutionController::class, 'executePythonFile'])->middleware('auth:sanctum');
+Route::post('/execute-python', [PythonExecutionController::class, 'executeFromFile'])->middleware('auth:sanctum');
+Route::post('/execute-python-code', [PythonExecutionController::class, 'executeFromCode'])->middleware('auth:sanctum');
 Route::apiResource('/python-schedules', PythonScheduleController::class)->middleware('auth:sanctum');

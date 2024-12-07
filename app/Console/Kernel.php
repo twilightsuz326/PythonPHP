@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
         foreach ($schedules as $task) {
             $schedule->call(function () use ($task, $pythonService) {
                 try {
-                    $output = $pythonService->execute($task->filename, $task->parameters);
+                    $output = $pythonService->executeFromFile($task->filename, $task->parameters);
                     Log::info('Python script succeeded: ' . $output);
                 } catch (\Exception $e) {
                     Log::error('Python script failed: ' . $e->getMessage());

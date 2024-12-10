@@ -5,6 +5,8 @@ import LoginPage from './components/LoginPage';
 import Home from './components/Home';
 import DashboardPage from './components/DashboardPage';
 import Appbar from './components/Appbar';
+import PythonFileList from './pages/PythonFileList';
+import PythonFileDetail from './pages/PythonFileDetail';
 import PythonFileUploader from './pages/PythonFileUploader';
 import PythonExecutor from './pages/PythonExecutor';
 import PythonScheduler from './pages/PythonScheduler';
@@ -28,12 +30,13 @@ function MainApp() {
         const titles = {
             '/': 'Home',
             '/login': 'Login',
+            '/python-files': 'Python File List',
             '/save-python': 'Python File Manager',
             '/run-python': 'Python File Executor',
             '/python-schedules': 'Python Scheduler',
             '/settings': 'Settings',
         };
-        setTitle(titles[location.pathname] || 'KatamichiGo');
+        setTitle(titles[location.pathname] || 'PythonPHP');
     }, [location]);
 
     const handleLogout = () => {
@@ -54,6 +57,8 @@ function MainApp() {
                         path="/dashboard"
                         element={user ? <DashboardPage user={user} /> : <Navigate to="/login" />}
                     />
+                    <Route path="/python-files" element={user ? <PythonFileList /> : <Navigate to="/login" />} />
+                    <Route path="/file/:fileName" element={user ? <PythonFileDetail /> : <Navigate to="/login" />} />
                     <Route path="/save-python" element={user ? <PythonFileUploader /> : <Navigate to="/login" />} />
                     <Route path="/run-python" element={user ? <PythonExecutor /> : <Navigate to="/login" />} />
                     <Route path="/python-schedules" element={user ? <PythonScheduler /> : <Navigate to="/login" />} />

@@ -7,8 +7,8 @@ function BottomNavigation({ user }) {
     const location = useLocation();
 
     const links = [
-        { to: '/save-python', label: 'Python File', icon: <FaRegFileCode /> },
-        { to: '/run-python', label: 'Python Execute', icon: <BiCodeAlt /> },
+        { to: '/python-files', label: 'Python File', icon: <FaRegFileCode /> },
+        { to: '/python-schedules', label: 'Python Schedules', icon: <BiCodeAlt /> },
         { to: '/settings', label: 'Settings', icon: <FaCog /> },
     ];
 

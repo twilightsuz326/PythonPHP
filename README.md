@@ -28,3 +28,13 @@ rye add beautifulsoup4
 PYTHON_PATH="***/.rye/shims/python3"
 RYE_PATH="***/.venv/lib/python3.12/site-packages"
 ```
+
+## npm run dev Error Troubleshooting
+```bash
+lsof -i:3000
+kill [PID]
+```
+
+## Design Reference
+- [https://elstar.themenate.net/app/project/project-list](https://elstar.themenate.net/app/project/project-list)
+- [https://v-dashboard.vercel.app/dashboard](https://v-dashboard.vercel.app/dashboard)

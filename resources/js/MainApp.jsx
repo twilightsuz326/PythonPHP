@@ -49,7 +49,7 @@ function MainApp() {
     return (
         <>
             <Appbar title={title} />
-            <div style={{ paddingTop: 60, paddingBottom: 80 }}>
+            <div style={{ paddingTop: 60, paddingBottom: 80, boxSizing: 'border-box'}}>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<LoginPage setUser={setUser} />} />

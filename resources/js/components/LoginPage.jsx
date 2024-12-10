@@ -11,7 +11,7 @@ function LoginPage({setUser}) {
         axios.post('/api/login', { email, password }, { withCredentials: true })
             .then(response => {
                 setUser(response.data.user);
-                navigate('/dashboard');
+                navigate('/python-files');
             })
             .catch(error => alert('Login failed'));
     }

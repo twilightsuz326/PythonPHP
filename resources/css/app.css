@@ -1,3 +1,7 @@
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -9,7 +13,9 @@ p {
     margin: 0 3px;
 }
 
-
+a {
+    text-decoration: none;
+}
 
 .modal-content{
     height: 60%;
@@ -17,6 +23,74 @@ p {
 }
 
 .code-editor {
-    max-height: 50%;
+    height: 50%;
     overflow: auto;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .code-editor {
+        font-size: 10px;
+    }
+}
+
+
+/* PythonFileList.jsx */
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.new-project-btn {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.btn {
+    display: block;
+    text-align: center;
+    padding: 10px 15px;
+    background-color: #ff8c40;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #ffc097;
+}
+
+.project-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.project-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.project-info p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.execute-btn {
+    color: #ff8c40;
+    background-color: transparent;
 }

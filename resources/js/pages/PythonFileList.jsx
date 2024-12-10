@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PythonFileExecutionModal from '../components/PythonFileExecutionModal';
+import { FaPlay } from 'react-icons/fa';
 
 function FileList() {
     const [files, setFiles] = useState([]);
@@ -32,24 +33,21 @@ function FileList() {
 
     return (
         <div>
-            <ul>
-                <li>
-                    <Link to="/file/new">
-                        + Add New File
-                    </Link>
-                </li>
-                {files.map((file, index) => (
-                    <li key={index}>
-                        {/* ファイルリンク */}
-                        <Link to={`/file/${file}`}>{file}</Link>
+            <input type="text" placeholder="Search" className='search-bar' />
+            <Link to='/file/new' className='btn new-project-btn'>+ New Python File</Link>
+            {files.map((file, index) => (
+                <div class="project-card">
+                    <div class="project-info">
+                        <Link to={`/file/${file}`}><h3>{file}</h3></Link>
+                        <p>This is a project description</p>
+                    </div>
+                    <button onClick={() => ExecuteModalOpen(file)} className='btn execute-btn'>
+                        <FaPlay />
+                    </button>
+                </div>
+            ))}
 
-                        {/* 実行ボタン */}
-                        <button onClick={() => ExecuteModalOpen(file)}>Execute</button>
-                    </li>
-                ))}
-            </ul>
-            
-            <PythonFileExecutionModal 
+            <PythonFileExecutionModal
                 isOpen={modalOpen}
                 onClose={ExecuteModalClode}
                 selectedFile={selectedFile}

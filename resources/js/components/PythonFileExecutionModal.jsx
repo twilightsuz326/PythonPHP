@@ -66,7 +66,7 @@ const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
 
     return (
         <Modal onClose={onClose}>
-            <h3>{selectedFile}</h3>
+            <h3>File: {selectedFile}</h3>
             <CodeEditor code={code} readOnly={true} />
             <label>
                 Parameters:

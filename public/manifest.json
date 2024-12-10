@@ -43,7 +43,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/python-schedules",
+  "start_url": "/python-files",
   "theme_color": "#ff6600",
   "background_color": "#ebebeb",
   "display": "standalone",

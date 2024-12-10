@@ -6,6 +6,7 @@ function NavBar({ user, handleLogout }) {
         <div>
             <h1>NavBar</h1>
             <button onClick={allowWebPush}>Allow Web Push</button>
+            <a href="#" onClick={() => window.location.reload(true)}>Reload</a>
             <a href="jp.co.park24.itcpquickapps://">Open App</a>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/about">About</NavLink>

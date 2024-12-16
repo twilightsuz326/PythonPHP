@@ -1,12 +1,12 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 
-const ParameterInput = ({ parameters, setParameters }) => {
+const ParameterInput = ({ value, onChange }) => {
     return (
         <TextField
             label="Parameters"
-            value={parameters}
-            onChange={(e) => setParameters(e.target.value)}
+            value={value}
+            onChange={onChange}
             placeholder="param1 param2"
             fullWidth
         />

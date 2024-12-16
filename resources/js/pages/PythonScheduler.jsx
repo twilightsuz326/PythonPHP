@@ -57,13 +57,13 @@ function PythonScheduler() {
     };
 
     return (
-        <Box sx={{ padding: '20px' }}>
+        <Box p={3} sx={{ maxWidth: '600px', margin: '0 auto' }}>
             {/* Form Section */}
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '16px', mb: 4 }}>
                 <PythonFileSelector
                     files={files}
-                    value={form.filename}
-                    onChange={(e, value) => setForm({ ...form, filename: value })}
+                    selectedFile={form.filename}
+                    setSelectedFile={(value) => setForm({ ...form, filename: value })}
                 />
                 <ParameterInput
                     value={form.parameters}
@@ -114,8 +114,6 @@ function PythonScheduler() {
             </Box>
         </Box>
     );
-
 }
-
 
 export default PythonScheduler;

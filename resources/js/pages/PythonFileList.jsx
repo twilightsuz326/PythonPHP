@@ -40,7 +40,7 @@ function PythonFileList() {
     };
 
     return (
-        <Box sx={{ padding: '20px' }}>
+        <Box p={3} sx={{ maxWidth: '600px', margin: '0 auto' }}>
             {/* 検索と新規作成ボタン */}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
                 <TextField

@@ -20,9 +20,9 @@ class Kernel extends ConsoleKernel
             $schedule->call(function () use ($task, $pythonService) {
                 try {
                     $output = $pythonService->executeFromFile($task->filename, $task->parameters);
-                    Log::info('Python script succeeded: ' . $output);
+                    Log::info('Python script succeeded. File: ' . $task->filename . ' Output: ' . $output);
                 } catch (\Exception $e) {
-                    Log::error('Python script failed: ' . $e->getMessage());
+                    Log::error('Python script failed. File: ' . $task->filename . ' Error: ' . $e->getMessage());
                 }
             })->cron($task->cron_expression);
         }

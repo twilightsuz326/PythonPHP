@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, IconButton } from '@mui/material';
+import { Box, TextField, Button, Typography, IconButton, Card } from '@mui/material';
 import { MdDelete, MdAdd } from 'react-icons/md';
-import Autocomplete from '@mui/material/Autocomplete';
 import axios from 'axios';
 import PythonFileSelector from '../components/PythonFileSelector';
 import ParameterInput from '../components/ParameterInput';
@@ -58,7 +57,8 @@ function PythonScheduler() {
     };
 
     return (
-        <Box p={3} sx={{ maxWidth: '600px', margin: '0 auto' }}>
+        <Box sx={{ padding: '20px' }}>
+            {/* Form Section */}
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '16px', mb: 4 }}>
                 <PythonFileSelector
                     files={files}
@@ -80,46 +80,42 @@ function PythonScheduler() {
                     color="primary"
                     type="submit"
                     startIcon={<MdAdd />}
+                    sx={{ width: '100%' }}
                 >
                     Add Schedule
                 </Button>
             </Box>
 
+            {/* Scheduled Tasks Section */}
             <Typography variant="h5" gutterBottom>Scheduled Tasks</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {schedules.map((schedule) => (
-                    <Box
-                        key={schedule.id}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            padding: '16px',
-                            border: '1px solid #ddd',
-                            borderRadius: '8px',
-                            backgroundColor: '#f9f9f9',
-                        }}
-                    >
+                    <Card key={schedule.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px' }}>
                         <Box>
-                            <Typography variant="h6">{schedule.filename}</Typography>
-                            <Typography variant="body2">
+                            <Typography variant="h6">
+                                {schedule.filename}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
                                 <strong>Parameters:</strong> {schedule.parameters.join(', ')}
                             </Typography>
-                            <Typography variant="body2">
+                            <Typography variant="body2" color="textSecondary">
                                 <strong>Cron:</strong> {schedule.cron_expression}
                             </Typography>
                         </Box>
                         <IconButton
                             onClick={() => handleDelete(schedule.id)}
                             color="error"
+                            sx={{ padding: '5px' }}
                         >
                             <MdDelete />
                         </IconButton>
-                    </Box>
+                    </Card>
                 ))}
             </Box>
         </Box>
     );
+
 }
+
 
 export default PythonScheduler;

@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import CodeEditor from '../components/CodeEditor';
 import PythonCodeExecutionModal from '../components/PythonCodeExecutionModal';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import { FaPlay, FaSave } from 'react-icons/fa';
 
 function FileDetail() {
     const { fileName } = useParams();
@@ -13,14 +15,14 @@ function FileDetail() {
         },
     ]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [newfilename, setnewFilename] = useState('');
+    const [newFilename, setNewFilename] = useState('');
     const [message, setMessage] = useState('');
 
     // ファイル内容を取得
     const fetchFileDetails = async () => {
         try {
             const response = await axios.get(`/api/python-files/${fileName}`);
-            setnewFilename(fileName.replace('.py', ''));
+            setNewFilename(fileName.replace('.py', ''));
             setCode([
                 {
                     type: 'code',
@@ -34,21 +36,22 @@ function FileDetail() {
 
     // ファイルを保存
     const handleSave = async () => {
-        if (!newfilename || code.length === 0 || !code[0]?.children[0]?.text) {
+        if (!newFilename || code.length === 0 || !code[0]?.children[0]?.text) {
             setMessage('Filename and code are required!');
             return;
         }
 
         try {
-            const strcode = code.map((block) => block.children.map((line) => line.text).join('\n')).join('\n');
+            const strCode = code
+                .map((block) => block.children.map((line) => line.text).join('\n'))
+                .join('\n');
             const response = await axios.post('/api/save-python', {
-                filename: newfilename,
-                code: strcode,
+                filename: newFilename,
+                code: strCode,
             });
 
             if (response.status === 200) {
                 setMessage('Python file saved successfully!');
-                fetchFiles(); // 保存後にファイルリストを更新
             } else {
                 setMessage('Failed to save Python file.');
             }
@@ -64,40 +67,63 @@ function FileDetail() {
     useEffect(() => {
         if (fileName === 'new') {
             return;
-        }else{
+        } else {
             fetchFileDetails();
         }
     }, [fileName]);
 
     return (
-        <div>
-            <h3>Editing File: {newfilename}.py</h3>
+        <Box sx={{ p: 2 }}>
+            <Typography variant="h5" gutterBottom>
+                Editing File: {newFilename}.py
+            </Typography>
 
             {/* コードエディタ */}
-            <CodeEditor code={code} onChange={setCode} />
+            <Box sx={{ my: 2 }}>
+                <CodeEditor code={code} onChange={setCode} />
+            </Box>
 
-            <div>
-                <label>
-                    Filename (without .py):
-                    <input
-                        type="text"
-                        value={newfilename}
-                        onChange={(e) => setnewFilename(e.target.value)}
-                        required
-                    />
-                </label>
-            </div>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <TextField
+                    label="Filename (without .py)"
+                    variant="outlined"
+                    value={newFilename}
+                    onChange={(e) => setNewFilename(e.target.value)}
+                    fullWidth
+                />
+            </Box>
 
-            <button onClick={() => setModalOpen(true)}>Execute</button>
-            <button onClick={handleSave}>Save Python File</button>
-            {message && <p>{message}</p>}
+            <Box sx={{ display: 'flex', gap: 2 }}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<FaPlay />}
+                    onClick={() => setModalOpen(true)}
+                >
+                    Execute
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<FaSave />}
+                    onClick={handleSave}
+                >
+                    Save Python File
+                </Button>
+            </Box>
+
+            {message && (
+                <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+                    {message}
+                </Typography>
+            )}
 
             <PythonCodeExecutionModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 code={code}
             />
-        </div>
+        </Box>
     );
 }
 

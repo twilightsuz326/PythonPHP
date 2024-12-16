@@ -5,8 +5,9 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-python';
 import 'prismjs/themes/prism-twilight.css';
 
-const CodeEditor = ({ code, onChange, readOnly }) => {
+const CodeEditor = ({ code, onChange, readOnly, placeholder }) => {
     const editor = useMemo(() => withReact(createEditor()), []);
+    placeholder = placeholder || 'Pythonコードを入力してください...';
 
     // 装飾関数
     const decorate = useCallback(([node, path]) => {
@@ -50,7 +51,7 @@ const CodeEditor = ({ code, onChange, readOnly }) => {
                     readOnly={readOnly}
                     renderLeaf={renderLeaf}
                     decorate={decorate}
-                    placeholder="Pythonコードを入力してください..."
+                    placeholder={placeholder}
                 />
             </pre>
         </Slate>

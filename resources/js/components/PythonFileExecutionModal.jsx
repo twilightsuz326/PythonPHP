@@ -3,14 +3,20 @@ import Modal from './Modal'; // モーダルコンポーネントをインポー
 import ParameterInput from './ParameterInput'; // ParameterInputコンポーネントをインポート
 import axios from 'axios';
 import CodeEditor from './CodeEditor';
+import { Box, Button, Typography, Alert, TextField } from '@mui/material';
 
 const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
     const [form, setForm] = useState({
         parameters: '',
     });
-    const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const [code, setCode] = useState([
+        {
+            type: 'code',
+            children: [{ text: '' }],
+        },
+    ]);
+    const [output, setOutput] = useState([
         {
             type: 'code',
             children: [{ text: '' }],
@@ -53,7 +59,12 @@ const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
                 parameters: form.parameters.split(' ').filter((param) => param !== ''),
             });
 
-            setOutput(response.data.output);
+            setOutput(
+                response.data.output.split('\n').map((line) => ({
+                    type: 'code',
+                    children: [{ text: line }],
+                }))
+            )
             setError('');
         } catch (err) {
             if (err.response) {
@@ -69,26 +80,37 @@ const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
 
     return (
         <Modal onClose={onClose}>
-            <h3>File: {selectedFile}</h3>
-            <CodeEditor code={code} readOnly={true} />
-            <ParameterInput
-                value={form.parameters}
-                onChange={(e) => setForm({ ...form, parameters: e.target.value })}
-                placeholder="Enter parameters separated by spaces"
-            />
-            <button onClick={handleExecute}>Run</button>
-            {output && (
-                <div>
-                    <h3>Output:</h3>
-                    <pre>{output}</pre>
-                </div>
-            )}
-            {error && (
-                <div>
-                    <h3>Error:</h3>
-                    <pre>{error}</pre>
-                </div>
-            )}
+            <Box>
+                <Typography variant="h6" gutterBottom>
+                    File: {selectedFile}
+                </Typography>
+                <Box mb={2}>
+                    <CodeEditor code={code} readOnly={true} />
+                </Box>
+                <ParameterInput
+                    value={form.parameters}
+                    onChange={(e) => setForm({ parameters: e.target.value })}
+                />
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleExecute}
+                    sx={{ mt: 2 }}
+                >
+                    Run
+                </Button>
+                {output && (
+                    <Box mt={2}>
+                        <Typography variant="subtitle1">Output:</Typography>
+                        <CodeEditor code={output} readOnly={true} placeholder={'Output will be displayed here...'} />
+                    </Box>
+                )}
+                {error && (
+                    <Box mt={2}>
+                        <Alert severity="error">{error}</Alert>
+                    </Box>
+                )}
+            </Box>
         </Modal>
     );
 };

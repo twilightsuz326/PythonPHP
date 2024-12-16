@@ -17,6 +17,7 @@ const theme = createTheme({
         },
         secondary: {
             main: '#F57C00', // 濃いオレンジ
+            contrastText: '#fff', //
         },
         background: {
             default: '#fff', // 背景色

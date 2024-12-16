@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import Modal from './Modal'; // モーダルコンポーネントをインポート
 import ParameterInput from './ParameterInput'; // ParameterInputコンポーネントをインポート
 import axios from 'axios';
+import CodeEditor from './CodeEditor';
+import { Box, Button, Typography, Alert, TextField } from '@mui/material';
 
 const PythonExecutionModal = ({ isOpen, onClose, code }) => {
     const [form, setForm] = useState({
         parameters: '',
     });
-    const [output, setOutput] = useState('');
+    const [output, setOutput] = useState([
+        {
+            type: 'code',
+            children: [{ text: '' }],
+        },
+    ]);
     const [error, setError] = useState('');
 
     const handleExecute = async () => {
@@ -24,7 +31,12 @@ const PythonExecutionModal = ({ isOpen, onClose, code }) => {
                 parameters: form.parameters.split(' ').filter((param) => param !== ''),
             });
 
-            setOutput(response.data.output);
+            setOutput(
+                response.data.output.split('\n').map((line) => ({
+                    type: 'code',
+                    children: [{ text: line }],
+                }))
+            );
             setError('');
         } catch (err) {
             if (err.response) {
@@ -32,7 +44,7 @@ const PythonExecutionModal = ({ isOpen, onClose, code }) => {
             } else {
                 setError('An error occurred: ' + err.message);
             }
-            setOutput('');
+            setOutput(''); // エラー時は出力をクリア
         }
     };
 
@@ -40,24 +52,34 @@ const PythonExecutionModal = ({ isOpen, onClose, code }) => {
 
     return (
         <Modal onClose={onClose}>
-            <h2>Execute Python File</h2>
-            <ParameterInput
-                value={form.parameters}
-                onChange={(e) => setForm({ ...form, parameters: e.target.value })}
-            />
-            <button onClick={handleExecute}>Run</button>
-            {output && (
-                <div>
-                    <h3>Output:</h3>
-                    <pre>{output}</pre>
-                </div>
-            )}
-            {error && (
-                <div>
-                    <h3>Error:</h3>
-                    <pre>{error}</pre>
-                </div>
-            )}
+            <Box>
+                <Typography variant="h6" gutterBottom>
+                    Execute Python File
+                </Typography>
+                <ParameterInput
+                    value={form.parameters}
+                    onChange={(e) => setForm({ ...form, parameters: e.target.value })}
+                />
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleExecute}
+                    sx={{ mt: 2 }}
+                >
+                    Run
+                </Button>
+                {output && (
+                    <Box mt={2}>
+                        <Typography variant="subtitle1">Output:</Typography>
+                        <CodeEditor code={output} readOnly={true} placeholder={'Output will be displayed here...'} />
+                    </Box>
+                )}
+                {error && (
+                    <Box mt={2}>
+                        <Alert severity="error">{error}</Alert>
+                    </Box>
+                )}
+            </Box>
         </Modal>
     );
 };

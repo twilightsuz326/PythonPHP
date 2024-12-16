@@ -27,7 +27,8 @@ function BottomNavigation({ user }) {
                     bottom: 0,
                     width: '100%',
                     zIndex: 1000,
-                    boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
+                    boxShadow: '0 -2px 5px rgba(0,0,0,0.1)',
+                    boxSizing: 'content-box',
                 }}>
                     {links.map(link => (
                         <Link key={link.to} to={link.to} style={{

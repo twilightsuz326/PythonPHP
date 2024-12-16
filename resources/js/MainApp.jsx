@@ -7,8 +7,6 @@ import DashboardPage from './components/DashboardPage';
 import Appbar from './components/Appbar';
 import PythonFileList from './pages/PythonFileList';
 import PythonFileDetail from './pages/PythonFileDetail';
-import PythonFileUploader from './pages/PythonFileUploader';
-import PythonExecutor from './pages/PythonExecutor';
 import PythonScheduler from './pages/PythonScheduler';
 import BottomNavigation from './components/BottomNavigation';
 import Settings from './pages/Settings';
@@ -59,8 +57,6 @@ function MainApp() {
                     />
                     <Route path="/python-files" element={user ? <PythonFileList /> : <Navigate to="/login" />} />
                     <Route path="/file/:fileName" element={user ? <PythonFileDetail /> : <Navigate to="/login" />} />
-                    <Route path="/save-python" element={user ? <PythonFileUploader /> : <Navigate to="/login" />} />
-                    <Route path="/run-python" element={user ? <PythonExecutor /> : <Navigate to="/login" />} />
                     <Route path="/python-schedules" element={user ? <PythonScheduler /> : <Navigate to="/login" />} />
                     <Route path="/settings" element={user ? <Settings user={user} handleLogout={handleLogout} /> : <Navigate to="/login" />} />
                 </Routes>

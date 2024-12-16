@@ -10,6 +10,16 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'react-vendor': ['react', 'react-dom'],
+                    'mui-vendor': ['@mui/material', '@emotion/react', '@emotion/styled'],
+                },
+            },
+        },
+    },
     server: {
         port: 3000,
         strictPort: true,

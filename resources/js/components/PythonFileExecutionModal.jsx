@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Modal from './Modal'; // モーダルコンポーネントをインポート
+import ParameterInput from './ParameterInput'; // ParameterInputコンポーネントをインポート
 import axios from 'axios';
 import CodeEditor from './CodeEditor';
 
 const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
-    const [parameters, setParameters] = useState('');
+    const [form, setForm] = useState({
+        parameters: '',
+    });
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const [code, setCode] = useState([
@@ -15,7 +18,7 @@ const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
     ]);
 
     useEffect(() => {
-        setParameters('');
+        setForm({ parameters: '' });
         setOutput('');
         setError('');
         if (selectedFile) {
@@ -47,7 +50,7 @@ const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
         try {
             const response = await axios.post('/api/execute-python', {
                 filename: selectedFile,
-                parameters: parameters.split(' ').filter((param) => param !== ''),
+                parameters: form.parameters.split(' ').filter((param) => param !== ''),
             });
 
             setOutput(response.data.output);
@@ -68,15 +71,11 @@ const PythonFileExecutionModal = ({ isOpen, onClose, selectedFile }) => {
         <Modal onClose={onClose}>
             <h3>File: {selectedFile}</h3>
             <CodeEditor code={code} readOnly={true} />
-            <label>
-                Parameters:
-                <input
-                    type="text"
-                    value={parameters}
-                    onChange={(e) => setParameters(e.target.value)}
-                    placeholder="Enter parameters separated by spaces"
-                />
-            </label>
+            <ParameterInput
+                value={form.parameters}
+                onChange={(e) => setForm({ ...form, parameters: e.target.value })}
+                placeholder="Enter parameters separated by spaces"
+            />
             <button onClick={handleExecute}>Run</button>
             {output && (
                 <div>

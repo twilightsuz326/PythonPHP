@@ -36,8 +36,8 @@ function FileList() {
             <input type="text" placeholder="Search" className='search-bar' />
             <Link to='/file/new' className='btn new-project-btn'>+ New Python File</Link>
             {files.map((file, index) => (
-                <div class="project-card">
-                    <div class="project-info">
+                <div className="project-card" key={file}>
+                    <div className="project-info">
                         <Link to={`/file/${file}`}><h3>{file}</h3></Link>
                         <p>This is a project description</p>
                     </div>

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Modal from './Modal'; // モーダルコンポーネントをインポート
+import ParameterInput from './ParameterInput'; // ParameterInputコンポーネントをインポート
 import axios from 'axios';
 
 const PythonExecutionModal = ({ isOpen, onClose, code }) => {
-    const [parameters, setParameters] = useState('');
+    const [form, setForm] = useState({
+        parameters: '',
+    });
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
 
@@ -18,7 +21,7 @@ const PythonExecutionModal = ({ isOpen, onClose, code }) => {
 
             const response = await axios.post('/api/execute-python-code', {
                 code: strcode,
-                parameters: parameters.split(' ').filter((param) => param !== ''),
+                parameters: form.parameters.split(' ').filter((param) => param !== ''),
             });
 
             setOutput(response.data.output);
@@ -38,15 +41,10 @@ const PythonExecutionModal = ({ isOpen, onClose, code }) => {
     return (
         <Modal onClose={onClose}>
             <h2>Execute Python File</h2>
-            <label>
-                Parameters:
-                <input
-                    type="text"
-                    value={parameters}
-                    onChange={(e) => setParameters(e.target.value)}
-                    placeholder="Enter parameters separated by spaces"
-                />
-            </label>
+            <ParameterInput
+                value={form.parameters}
+                onChange={(e) => setForm({ ...form, parameters: e.target.value })}
+            />
             <button onClick={handleExecute}>Run</button>
             {output && (
                 <div>

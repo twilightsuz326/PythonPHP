@@ -1,19 +1,16 @@
 import React from 'react';
+import { TextField } from '@mui/material';
 
-function ParameterInput({ parameters, setParameters }) {
+const ParameterInput = ({ parameters, setParameters }) => {
     return (
-        <div>
-            <label>
-                Parameters (space-separated):
-                <input
-                    type="text"
-                    value={parameters}
-                    onChange={(e) => setParameters(e.target.value)}
-                    placeholder="e.g., param1 param2"
-                />
-            </label>
-        </div>
+        <TextField
+            label="Parameters"
+            value={parameters}
+            onChange={(e) => setParameters(e.target.value)}
+            placeholder="param1 param2"
+            fullWidth
+        />
     );
-}
+};
 
 export default ParameterInput;

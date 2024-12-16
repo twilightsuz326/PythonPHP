@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Box, TextField, Button, Typography, IconButton } from '@mui/material';
+import { MdDelete, MdAdd } from 'react-icons/md';
+import Autocomplete from '@mui/material/Autocomplete';
 import axios from 'axios';
 import PythonFileSelector from '../components/PythonFileSelector';
 import ParameterInput from '../components/ParameterInput';
@@ -55,50 +58,67 @@ function PythonScheduler() {
     };
 
     return (
-        <div>
-            <h1>Python Scheduler</h1>
-            <form onSubmit={handleSubmit}>
+        <Box p={3} sx={{ maxWidth: '600px', margin: '0 auto' }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '16px', mb: 4 }}>
                 <PythonFileSelector
                     files={files}
-                    selectedFile={form.filename}
-                    setSelectedFile={(filename) => setForm({ ...form, filename })}
+                    value={form.filename}
+                    onChange={(e, value) => setForm({ ...form, filename: value })}
                 />
                 <ParameterInput
-                    parameters={form.parameters}
-                    setParameters={(parameters) => setForm({ ...form, parameters })}
+                    value={form.parameters}
+                    onChange={(e) => setForm({ ...form, parameters: e.target.value })}
                 />
-                <div>
-                    <label>
-                        Cron Expression:
-                        <input
-                            type="text"
-                            value={form.cron_expression}
-                            onChange={(e) => setForm({ ...form, cron_expression: e.target.value })}
-                            required
-                        />
-                    </label>
-                </div>
-                <button type="submit">Add Schedule</button>
-            </form>
+                <TextField
+                    label="Cron Expression"
+                    value={form.cron_expression}
+                    onChange={(e) => setForm({ ...form, cron_expression: e.target.value })}
+                    required
+                />
+                <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    startIcon={<MdAdd />}
+                >
+                    Add Schedule
+                </Button>
+            </Box>
 
-            <h2>Scheduled Tasks</h2>
-            <ul>
+            <Typography variant="h5" gutterBottom>Scheduled Tasks</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {schedules.map((schedule) => (
-                    <li key={schedule.id}>
-                        <p>
-                            <strong>File:</strong> {schedule.filename}
-                        </p>
-                        <p>
-                            <strong>Parameters:</strong> {schedule.parameters.join(', ')}
-                        </p>
-                        <p>
-                            <strong>Cron:</strong> {schedule.cron_expression}
-                        </p>
-                        <button onClick={() => handleDelete(schedule.id)}>Delete</button>
-                    </li>
+                    <Box
+                        key={schedule.id}
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '16px',
+                            border: '1px solid #ddd',
+                            borderRadius: '8px',
+                            backgroundColor: '#f9f9f9',
+                        }}
+                    >
+                        <Box>
+                            <Typography variant="h6">{schedule.filename}</Typography>
+                            <Typography variant="body2">
+                                <strong>Parameters:</strong> {schedule.parameters.join(', ')}
+                            </Typography>
+                            <Typography variant="body2">
+                                <strong>Cron:</strong> {schedule.cron_expression}
+                            </Typography>
+                        </Box>
+                        <IconButton
+                            onClick={() => handleDelete(schedule.id)}
+                            color="error"
+                        >
+                            <MdDelete />
+                        </IconButton>
+                    </Box>
                 ))}
-            </ul>
-        </div>
+            </Box>
+        </Box>
     );
 }
 

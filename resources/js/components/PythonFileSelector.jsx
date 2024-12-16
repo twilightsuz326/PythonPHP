@@ -1,26 +1,16 @@
 import React from 'react';
+import { Autocomplete, TextField } from '@mui/material';
 
-function PythonFileSelector({ files, selectedFile, setSelectedFile }) {
-
+const PythonFileSelector = ({ files, selectedFile, setSelectedFile }) => {
     return (
-        <div>
-            <label>
-                Select Python File:
-                <select
-                    value={selectedFile}
-                    onChange={(e) => setSelectedFile(e.target.value)}
-                    required
-                >
-                    <option value="">-- Select a File --</option>
-                    {files.map((file) => (
-                        <option key={file} value={file}>
-                            {file}
-                        </option>
-                    ))}
-                </select>
-            </label>
-        </div>
+        <Autocomplete
+            options={files}
+            getOptionLabel={(option) => option || ''}
+            value={selectedFile}
+            onChange={(e, newValue) => setSelectedFile(newValue)}
+            renderInput={(params) => <TextField {...params} label="Select Python File" required />}
+        />
     );
-}
+};
 
 export default PythonFileSelector;

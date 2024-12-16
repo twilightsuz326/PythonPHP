@@ -1,11 +1,5 @@
-*, *::before, *::after {
-  box-sizing: inherit;
-}
 
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: #f4f4f4;
 }
 
@@ -93,4 +87,42 @@ a {
 .execute-btn {
     color: #ff8c40;
     background-color: transparent;
+}
+
+/* PythonExecutors.jsx */
+/* スケジュールリストのコンテナ */
+.schedule-item {
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #FF9800; /* オレンジ色のボーダー */
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.schedule-item:hover {
+    background-color: #FFF3E0; /* オレンジ系の薄い背景色 */
+}
+
+/* 削除ボタン */
+.delete-button {
+    color: #d32f2f;
+    margin-left: auto; /* ボタンを右端に配置 */
+    cursor: pointer;
+}
+
+/* タイトル */
+.schedule-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF9800; /* オレンジ */
+    margin-bottom: 4px;
+}
+
+/* パラメータやCron式 */
+.schedule-details {
+    font-size: 14px;
+    color: #555; /* 薄いグレー */
+    margin-bottom: 4px;
 }
